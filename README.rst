@@ -3,7 +3,7 @@ Allow overriding fields on Proxy models.
 Mostly, you won't want to do this. However, I did have a situation where it would
 be useful, mainly for reducing the numbers of queries I was having to run.
 
-You can read about it at
+You can read about it at: http://schinckel.net/2015/05/13/django-proxy-model-relations/
 
 
 Usage is pretty simple:
