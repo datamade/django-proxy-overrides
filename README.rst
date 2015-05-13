@@ -3,24 +3,17 @@ Allow overriding fields on Proxy models.
 Mostly, you won't want to do this. However, I did have a situation where it would
 be useful, mainly for reducing the numbers of queries I was having to run.
 
+You can read about it at
 
-I've started using `Proxy` models in some code for handling specialisation: basically,
-the data for each subclass is in the same shape. This is mainly because I'm storing a
-handful of regular fields, but then a `JSON` object containing other stuff that is
-possibly only relevant to a single subclass.
 
-In hindsight, I'd probably use proper multi-table inheritance, but it's a bit late for
-that right now.
+Usage is pretty simple:
 
-So, there is one main model that is subclassed in every instance. In addition, there are
-several other models that will probably be subclassed if they are relevant to the case
-for which the master model is subclassed. Each of these models contains a relation back
-to the master model.
+    class ProxyModel(ParentModel):
+        related = ProxyForeignKey(OtherProxyModel)
 
-If you subclass one of these other models, and then traverse the related link, you'll get
-back the master superclass, when in actuality, you want the subclass. Similarly, if you
-instantiate one of the master subclasses, and get the related other objects, you want the
-related subclass, but you'll get the superclass.
+You may only override fields that exist, although in the future, it may be possible to create a relation with a different name (enabling you to keep the standard relation to the non-proxy model).
 
-Perhaps code will explain:
+You may also only override with a compatible field, and can only point to another proxy model (and only one proxy model may point to any other given proxy model).
 
+
+It is also possible to override non-related models, but I'm not that interested in that use case at the moment.
