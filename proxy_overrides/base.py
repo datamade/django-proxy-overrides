@@ -32,7 +32,7 @@ def override_model_field(model, name, field):
                 related_name
             ))
 
-        model.add_to_class(name, field)
+    model.add_to_class(name, field)
 
         field.remote_field.model.add_to_class(
             related_name,
