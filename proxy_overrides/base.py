@@ -34,6 +34,7 @@ def override_model_field(model, name, field):
 
     model.add_to_class(name, field)
 
+    if field.remote_field:
         field.remote_field.model.add_to_class(
             related_name,
             ReverseManyToOneDescriptor(field.remote_field)
