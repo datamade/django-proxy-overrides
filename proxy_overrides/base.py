@@ -1,7 +1,7 @@
 from django.dispatch import receiver
 
 from django.db.models import signals
-from django.db.models.fields.related import ForeignRelatedObjectsDescriptor
+from django.db.models.fields.related import ReverseManyToOneDescriptor
 
 
 def override_model_field(model, name, field):
@@ -13,29 +13,29 @@ def override_model_field(model, name, field):
             model, name, field.__class__.__name__
         ))
 
-    if field.rel:
+    if field.remote_field:
         # Ensure we are referencing another proxy class.
-        if not field.rel.to._meta.proxy:
+        if not field.remote_field.model._meta.proxy:
             raise TypeError('You must relate to another proxy class, not {!r}'.format(
-                field.rel.to.__name__
+                field.remote_field.model.__name__
             ))
 
-        related_name = getattr(field, 'related_name', original_field.related.get_accessor_name())
-        related_model = getattr(field.rel.to, related_name).related.model
-        if related_model._meta.proxy:
-            raise TypeError('There is already a proxy model {!r} related to {!r} using {!r}'.format(
-                related_model.__name__,
-                field.rel.to.__name__,
-                related_name
-            ))
+        related_name = getattr(field.remote_field, 'related_name')
+        if related_name:
+            related_model = getattr(field.remote_field.model, related_name).rel.model
+            if related_model._meta.proxy:
+                raise TypeError('There is already a proxy model {!r} related to {!r} using {!r}'.format(
+                    related_model.__name__,
+                    field.remote_field.model.__name__,
+                    related_name
+                ))
 
-    model.add_to_class(name, field)
+            model.add_to_class(name, field)
 
-    if field.rel:
-        field.rel.to.add_to_class(
-            related_name,
-            ForeignRelatedObjectsDescriptor(field.related)
-        )
+            field.remote_field.model.add_to_class(
+                related_name,
+                ReverseManyToOneDescriptor(field.remote_field)
+            )
 
 
 class ProxyField(object):
