@@ -4,7 +4,7 @@ from proxy_overrides.base import ProxyField
 
 
 class Foo(models.Model):
-    bar = models.ForeignKey('tests.Bar')
+    bar = models.ForeignKey('tests.Bar', on_delete='null')
 
 
 class Bar(models.Model):
@@ -17,7 +17,7 @@ class BarProxy(Bar):
 
 
 class FooProxy(Foo):
-    bar = ProxyForeignKey(BarProxy)
+    bar = ProxyForeignKey(BarProxy, on_delete='null')
 
     class Meta:
         proxy = True
