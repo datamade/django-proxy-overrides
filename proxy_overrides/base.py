@@ -33,6 +33,7 @@ def override_model_field(model, name, field):
             ))
 
     model.add_to_class(name, field)
+    model._meta.local_fields.remove(field)
 
     if field.remote_field:
         field.remote_field.model.add_to_class(
