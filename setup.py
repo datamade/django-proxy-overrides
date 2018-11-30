@@ -7,7 +7,7 @@ README = open('README.rst').read()
 setup(
     name='django-proxy-overrides',
     version='.'.join(map(str, VERSION)),
-    description='Overridable foriegn key fields for Proxy models',
+    description='Overridable foreign key fields for Proxy models',
     long_description=README,
     url='https://github.com/datamade/django-proxy-overrides',
     author='Matthew Schinckel',
