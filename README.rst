@@ -8,6 +8,8 @@ You can read about it at: http://schinckel.net/2015/05/13/django-proxy-model-rel
 
 Usage is pretty simple:
 
+.. code-block :: python
+
     from proxy_overrides.related import ProxyForeignKey
 
     class ProxyModel(ParentModel):
