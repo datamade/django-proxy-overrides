@@ -13,13 +13,13 @@ setup(
     author='Matthew Schinckel',
     author_email='matt@schinckel.net',
     maintainer='Forest Gregg',
-    auther_email='fgregg@datamade.us',
+    maintainer_email='fgregg@datamade.us',
     packages=find_packages(exclude=('tests*',)),
     install_requires=['Django'],
     test_suite='runtests.runtests',
     classifiers=[
         'License :: OSI Approved :: BSD License',
-        'Programming Language :: Python :: 3 :: Only'
+        'Programming Language :: Python :: 3 :: Only',
         'Framework :: Django',
         'Topic :: Software Development :: Libraries :: Python Modules'],
 )
