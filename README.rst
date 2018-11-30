@@ -1,4 +1,4 @@
-Allow overriding fields on Proxy models.
+Allow overriding foreign key fields on Proxy models.
 
 Mostly, you won't want to do this. However, I did have a situation where it would
 be useful, mainly for reducing the numbers of queries I was having to run.
@@ -7,6 +7,8 @@ You can read about it at: http://schinckel.net/2015/05/13/django-proxy-model-rel
 
 
 Usage is pretty simple:
+
+    from proxy_overrides.related import ProxyForeignKey
 
     class ProxyModel(ParentModel):
         related = ProxyForeignKey(OtherProxyModel)
