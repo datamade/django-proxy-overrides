@@ -17,7 +17,7 @@ Usage is pretty simple:
 
 You may only override fields that exist, although in the future, it may be possible to create a relation with a different name (enabling you to keep the standard relation to the non-proxy model).
 
-You may also only override with a compatible field, and can only point to another proxy model (and only one proxy model may point to any other given proxy model).
+You may also only override with a compatible field (and only one proxy model may point to any other given proxy model).
 
 
 It is also possible to override non-related models, but I'm not that interested in that use case at the moment.

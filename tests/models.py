@@ -8,12 +8,16 @@ class Foo(models.Model):
 
 
 class Bar(models.Model):
-    pass
+    a = models.IntegerField(default=1)
 
 
 class BarProxy(Bar):
     class Meta:
         proxy = True
+
+
+class BarChild(Bar):
+    b = models.IntegerField(default=2)
 
 
 class FooProxy(Foo):
@@ -23,16 +27,11 @@ class FooProxy(Foo):
         proxy = True
 
 
-class BarProxy2(Bar):
+class FooChildProxy(Foo):
+    bar = ProxyForeignKey(BarChild, on_delete='null')
+
     class Meta:
         proxy = True
-
-
-# class FooStringProxy(Foo):
-#     bar = ProxyForeignKey('tests.BarProxy2')
-#
-#     class Meta:
-#         proxy = True
 
 
 class Baz(models.Model):

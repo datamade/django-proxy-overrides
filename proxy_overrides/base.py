@@ -14,11 +14,6 @@ def override_model_field(model, name, field):
         ))
 
     if field.remote_field:
-        # Ensure we are referencing another proxy class.
-        if not field.remote_field.model._meta.proxy:
-            raise TypeError('You must relate to another proxy class, not {!r}'.format(
-                field.remote_field.model.__name__
-            ))
 
         related_name = field.remote_field.related_name
         if not related_name:
