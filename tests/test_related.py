@@ -1,6 +1,6 @@
 from django.test import TestCase
 
-from .models import Foo, Bar, FooProxy, BarProxy
+from .models import Foo, Bar, FooProxy, BarProxy, BarChild, FooChildProxy
 
 
 class TestRelated(TestCase):
@@ -28,6 +28,25 @@ class TestRelated(TestCase):
             foo.bar.__class__
         )
 
+    def test_fk_child_override_child(self):
+        bar_child = BarChild.objects.create()
+        Foo.objects.create(bar=bar_child)
+
+        foo = FooChildProxy.objects.get()
+
+        self.assertEqual(
+            FooChildProxy,
+            foo.__class__
+        )
+
+        self.assertEqual(
+            BarChild,
+            foo.bar.__class__
+        )
+
+        assert foo.bar.a == 1
+        assert foo.bar.b == 2
+
     def test_reverse_fk_field_override(self):
         bar = Bar.objects.create()
         Foo.objects.create(bar=bar)
@@ -44,12 +63,21 @@ class TestRelated(TestCase):
             bar.foo_set.model
         )
 
-    def test_exception_if_not_proxy_target(self):
-        with self.assertRaises(TypeError):
-            from proxy_overrides.related import ProxyForeignKey
+    def test_reverse_fk_field_child_child(self):
+        bar_child = BarChild.objects.create()
+        Foo.objects.create(bar=bar_child)
 
-            class FooNewProxy(Foo):
-                bar = ProxyForeignKey(Bar)
+        bar_child = BarChild.objects.get()
+
+        self.assertEqual(
+            BarChild,
+            bar_child.__class__
+        )
+
+        self.assertEqual(
+            FooChildProxy,
+            bar_child.foo_set.model
+        )
 
     def test_exception_if_same_relation(self):
         with self.assertRaises(TypeError):
