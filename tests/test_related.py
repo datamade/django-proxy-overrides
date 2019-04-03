@@ -1,3 +1,5 @@
+from proxy_overrides.base import ProxyRelationAlreadyExists
+
 from django.test import TestCase
 
 from .models import Foo, Bar, FooProxy, BarProxy, BarChild, FooChildProxy
@@ -80,8 +82,8 @@ class TestRelated(TestCase):
         )
 
     def test_exception_if_same_relation(self):
-        with self.assertRaises(TypeError):
+        with self.assertRaises(ProxyRelationAlreadyExists):
             from proxy_overrides.related import ProxyForeignKey
 
             class FooNewProxy(Foo):
-                bar = ProxyForeignKey(BarProxy)
+                bar = ProxyForeignKey('BarProxy', on_delete='null')
