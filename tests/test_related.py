@@ -1,6 +1,16 @@
 from django.test import TestCase
 
-from .models import Foo, Bar, FooProxy, BarProxy, BarChild, FooChildProxy
+from .models import (
+    Foo,
+    Bar,
+    FooProxy,
+    BarProxy,
+    BarChild,
+    FooChildProxy,
+    UnrelatedFoo,
+    UnrelatedFooProxy,
+    UnrelatedBarProxy,
+)
 
 
 class TestRelated(TestCase):
@@ -85,3 +95,19 @@ class TestRelated(TestCase):
 
             class FooNewProxy(Foo):
                 bar = ProxyForeignKey(BarProxy)
+
+    def test_unrelated_proxy(self):
+        bar = Bar.objects.create()
+        UnrelatedFoo.objects.create(bar=bar)
+
+        foo = UnrelatedFooProxy.objects.get()
+
+        self.assertEqual(
+            UnrelatedFooProxy,
+            foo.__class__
+        )
+
+        self.assertEqual(
+            UnrelatedBarProxy,
+            foo.bar.__class__
+        )
