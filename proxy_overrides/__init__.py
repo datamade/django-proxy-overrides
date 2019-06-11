@@ -1,1 +1,1 @@
-VERSION = (0, 2, 0)  # NOQA
+VERSION = (0, 2, 1)  # NOQA
