@@ -41,8 +41,8 @@ def override_model_field(model, name, field):
                     ReverseManyToOneDescriptor(field.remote_field)
                 )
 
-        model.add_to_class(name, field)
-        model._meta.local_fields.remove(field)
+            model.add_to_class(name, field)
+            model._meta.local_fields.remove(field)
 
         lazy_related_operation(after_resolve_related_class,
                                model,
