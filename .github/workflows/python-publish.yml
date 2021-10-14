@@ -28,11 +28,16 @@ jobs:
       run: |
         pip install -r requirements.txt
         ENVNAME=test.sqlite python runtests.py
-  deploy:
+  deploy:    
     if: github.event_name == 'push' && startsWith(github.event.ref, 'refs/tags')
     needs: test
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-latest    
     steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.x'
     - name: Build package
       run: |
         pip install twine wheel
