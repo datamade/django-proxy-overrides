@@ -1,3 +1,5 @@
+[![Tests](https://github.com/datamade/django-proxy-overrides/actions/workflows/python-publish.yml/badge.svg)](https://github.com/datamade/django-proxy-overrides/actions/workflows/python-publish.yml)
+
 Allow overriding foreign key fields on Proxy models.
 
 Mostly, you won't want to do this. However, I did have a situation where it would
