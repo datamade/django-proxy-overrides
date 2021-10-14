@@ -1,6 +1,18 @@
+from django.db.models import IntegerField
 from django.test import TestCase
 
-from .models import Foo, Bar, FooProxy, BarProxy, BarChild, FooChildProxy
+from proxy_overrides.base import ProxyField
+from .models import (
+    Foo,
+    Bar,
+    UnrelatedFoo,
+    FooProxy,
+    BarProxy,
+    BarChild,
+    FooChildProxy,
+    UnrelatedFooProxy,
+    UnrelatedBarProxy,
+)
 
 
 class TestRelated(TestCase):
@@ -80,8 +92,46 @@ class TestRelated(TestCase):
         )
 
     def test_exception_if_same_relation(self):
-        with self.assertRaises(TypeError):
+        with self.assertRaises(TypeError) as e:
             from proxy_overrides.related import ProxyForeignKey
 
             class FooNewProxy(Foo):
-                bar = ProxyForeignKey(BarProxy)
+                bar = ProxyForeignKey(BarProxy, on_delete='null')
+
+        self.assertEqual(
+            "There is already a proxy model 'BarProxy' related to 'BarProxy' "
+            "using 'foo_set'",
+            str(e.exception)
+        )
+
+    def test_field_compatibility(self):
+        with self.assertRaises(TypeError) as e:
+
+            class ProxyIntegerField(ProxyField):
+                def __init__(self, *args, **kwargs):
+                    super(ProxyIntegerField, self).__init__(IntegerField(*args, **kwargs))
+
+            class FooNewProxy(Foo):
+                bar = ProxyIntegerField()
+
+        self.assertEqual(
+            "Model <class 'tests.test_related.TestRelated.test_field_compatibility.<locals>.FooNewProxy'> "
+            "field 'bar' is not compatible with 'IntegerField'",
+            str(e.exception)
+        )
+
+    def test_unrelated_proxy(self):
+        bar = Bar.objects.create()
+        UnrelatedFoo.objects.create(bar=bar)
+
+        foo = UnrelatedFooProxy.objects.get()
+
+        self.assertEqual(
+            UnrelatedFooProxy,
+            foo.__class__
+        )
+
+        self.assertEqual(
+            UnrelatedBarProxy,
+            foo.bar.__class__
+        )

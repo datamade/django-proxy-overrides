@@ -14,27 +14,26 @@ def override_model_field(model, name, field):
         ))
 
     if field.remote_field:
-
         related_name = field.remote_field.related_name
         if not related_name:
             related_name = original_field.remote_field.get_accessor_name()
-        related_model = getattr(field.remote_field.model, related_name).rel.model
+        if related_name != '+':
+            related_model = getattr(field.remote_field.model, related_name).rel.model
 
-        if related_model._meta.proxy:
-            raise TypeError('There is already a proxy model {!r} related to {!r} using {!r}'.format(
-                related_model.__name__,
-                field.remote_field.model.__name__,
-                related_name
-            ))
+            if related_model._meta.proxy:
+                raise TypeError('There is already a proxy model {!r} related to {!r} using {!r}'.format(
+                    related_model.__name__,
+                    field.remote_field.model.__name__,
+                    related_name
+                ))
+
+            field.remote_field.model.add_to_class(
+                related_name,
+                ReverseManyToOneDescriptor(field.remote_field)
+            )
 
     model.add_to_class(name, field)
     model._meta.local_fields.remove(field)
-
-    if field.remote_field:
-        field.remote_field.model.add_to_class(
-            related_name,
-            ReverseManyToOneDescriptor(field.remote_field)
-        )
 
 
 class ProxyField(object):
