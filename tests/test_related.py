@@ -1,5 +1,6 @@
 from django.db.models import IntegerField
 from django.test import TestCase
+from django.db import models
 
 from proxy_overrides.base import ProxyField
 from .models import (
@@ -96,7 +97,7 @@ class TestRelated(TestCase):
             from proxy_overrides.related import ProxyForeignKey
 
             class FooNewProxy(Foo):
-                bar = ProxyForeignKey(BarProxy, on_delete='null')
+                bar = ProxyForeignKey(BarProxy, on_delete=models.SET_NULL)
 
         self.assertEqual(
             "There is already a proxy model 'BarProxy' related to 'BarProxy' "

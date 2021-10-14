@@ -4,7 +4,7 @@ from proxy_overrides.base import ProxyField
 
 
 class Foo(models.Model):
-    bar = models.ForeignKey('tests.Bar', on_delete='null')
+    bar = models.ForeignKey('tests.Bar', null=True, on_delete=models.SET_NULL)
 
 
 class Bar(models.Model):
@@ -12,7 +12,7 @@ class Bar(models.Model):
 
 
 class UnrelatedFoo(models.Model):
-    bar = models.ForeignKey('tests.Bar', related_name='+', on_delete='null')
+    bar = models.ForeignKey('tests.Bar', null=True, related_name='+', on_delete=models.SET_NULL)
 
 
 class BarProxy(Bar):
@@ -25,14 +25,14 @@ class BarChild(Bar):
 
 
 class FooProxy(Foo):
-    bar = ProxyForeignKey(BarProxy, on_delete='null')
+    bar = ProxyForeignKey(BarProxy, on_delete=models.SET_NULL)
 
     class Meta:
         proxy = True
 
 
 class FooChildProxy(Foo):
-    bar = ProxyForeignKey(BarChild, on_delete='null')
+    bar = ProxyForeignKey(BarChild, on_delete=models.SET_NULL)
 
     class Meta:
         proxy = True
@@ -55,7 +55,7 @@ class UnrelatedBarProxy(Bar):
 
 
 class UnrelatedFooProxy(UnrelatedFoo):
-    bar = ProxyForeignKey(UnrelatedBarProxy, on_delete='null')
+    bar = ProxyForeignKey(UnrelatedBarProxy, on_delete=models.SET_NULL)
 
     class Meta:
         proxy = True
