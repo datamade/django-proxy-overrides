@@ -1,4 +1,6 @@
 from django.db.models import IntegerField
+from proxy_overrides.base import ProxyRelationAlreadyExists
+
 from django.test import TestCase
 from django.db import models
 
@@ -93,15 +95,14 @@ class TestRelated(TestCase):
         )
 
     def test_exception_if_same_relation(self):
-        with self.assertRaises(TypeError) as e:
+        with self.assertRaises(ProxyRelationAlreadyExists) as e:
             from proxy_overrides.related import ProxyForeignKey
 
             class FooNewProxy(Foo):
-                bar = ProxyForeignKey(BarProxy, on_delete=models.SET_NULL)
+                bar = ProxyForeignKey('BarProxy', on_delete=models.SET_NULL)
 
         self.assertEqual(
-            "There is already a proxy model 'BarProxy' related to 'BarProxy' "
-            "using 'foo_set'",
+            "There is already a proxy model 'BarProxy' related to 'FooNewProxy' using 'foo_set'",
             str(e.exception)
         )
 

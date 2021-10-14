@@ -25,6 +25,7 @@ class BarChild(Bar):
 
 
 class FooProxy(Foo):
+    # reference related model directly
     bar = ProxyForeignKey(BarProxy, on_delete=models.SET_NULL)
 
     class Meta:
@@ -32,7 +33,8 @@ class FooProxy(Foo):
 
 
 class FooChildProxy(Foo):
-    bar = ProxyForeignKey(BarChild, on_delete=models.SET_NULL)
+    # related model passed as string
+    bar = ProxyForeignKey('BarChild', on_delete=models.SET_NULL)
 
     class Meta:
         proxy = True
