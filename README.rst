@@ -1,4 +1,7 @@
-[![Tests](https://github.com/datamade/django-proxy-overrides/actions/workflows/python-publish.yml/badge.svg)](https://github.com/datamade/django-proxy-overrides/actions/workflows/python-publish.yml)
+|Tests|
+
+.. |Tests| image:: https://github.com/datamade/django-proxy-overrides/actions/workflows/python-publish.yml/badge.svg
+   :target: https://github.com/datamade/django-proxy-overrides/actions/workflows/python-publish.yml
 
 Allow overriding foreign key fields on Proxy models.
 
