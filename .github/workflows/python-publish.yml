@@ -33,6 +33,10 @@ jobs:
     needs: test
     runs-on: ubuntu-latest
     steps:
+    - name: Build package
+      run: |
+        pip install twine wheel
+        pip wheel -w dist --no-deps .
     - name: Publish package
       uses: pypa/gh-action-pypi-publish@27b31702a0e7fc50959f5ad993c78deac1bdfc29
       with:
